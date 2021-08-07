@@ -16,7 +16,7 @@ pip3 install requirements.txt
 If you want to use your domain.
 ```
 Set  A record to your public IP.  -Pointe to your IP/Server-
-Set NS record to any subdomain. -Example: data.attacker.com-
+Set NS record to any subdomain. -Example: data.example.com-
 ```
 
 # Usage
